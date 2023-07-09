@@ -26,22 +26,6 @@ def index(request):
     return render(request, 'xxx/index.html', content)
 
 
-def get_q(request, question_id):
-    q = Question.objects.get(pk=question_id)
-    content = {
-        'q': q,
-    }
-    return render(request, 'xxx/index.html', content)
-
-
-@require_http_methods(['POST'])
-def test(request):
-    x = request.POST['x']
-    y = request.POST['y']
-    x,y = int(x), int(y)
-    return render(request, 'xxx/index.html')
-    return HttpResponse(f'sum = {x + y}')
-    # return JsonResponse(dic)
 
 @csrf_exempt
 @require_http_methods(['POST'])
@@ -55,9 +39,19 @@ def image_info(request):
 class SiteImagesViewSet(viewsets.ModelViewSet):
     serializer_class = SiteImagesSerializer
 
-    lookup_field = 'domain_id'
+    lookup_field = 'image_id'
+    lookup_url_kwarg = 'image_id'
+
+    def domain(self):
+        return Domain.objects.get(pk=self.kwargs['domain_id'])
 
     def get_queryset(self):
-        print(self.kwargs)
-        domain = Domain.objects.get(pk=self.kwargs['domain_id'])
-        return SiteImages.objects.filter(domain=domain)
+        return SiteImages.objects.filter(domain_id=self.kwargs['domain_id'])
+
+    def get_object(self):
+        return SiteImages.objects.get(pk=self.kwargs['image_id'])
+
+    # def get_object(self):
+    #     print('get_object')
+    #     print(self.kwargs)
+    #     return SiteImages.objects.get(domain_id=self.kwargs['domain_id'], pk=self.kwargs['image_id'])

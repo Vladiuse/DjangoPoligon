@@ -9,6 +9,7 @@ from .models import SiteImages
 
 
 class SiteImagesSerializer(serializers.ModelSerializer):
+    url = serializers.HyperlinkedIdentityField(view_name='xxx:image-detail',lookup_url_kwarg='image_id')
     class Meta:
         model = SiteImages
         fields = '__all__'
