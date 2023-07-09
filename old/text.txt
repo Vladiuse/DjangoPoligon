@@ -1,0 +1,61 @@
+****************************************************************************************************
+266
+START check_domain gul.free.biotrin-new.com 266
+START get_domain_check_id
+200
+{'data': {'type': 'analysis', 'id': 'u-3edc2e93363bf40d0601fb0f4b5b6f36a1e8e3becdb51b74ef313a75ed164d6e-1678965428', 'links': {'self': 'https://www.virustotal.com/api/v3/analyses/u-3edc2e93363bf40d0601fb0f4b5b6f36a1e8e3becdb51b74ef313a75ed164d6e-1678965428'}}}
+****************************************************************************************************
+START get_checked_data
+200
+{'meta': {'url_info': {'url': 'http://gul.free.biotrin-new.com/', 'id': '3edc2e93363bf40d0601fb0f4b5b6f36a1e8e3becdb51b74ef313a75ed164d6e'}}, 'data': {'attributes': {'date': 1678965428, 'status': 'queued', 'stats': {'harmless': 0, 'malicious': 0, 'suspicious': 0, 'undetected': 0, 'timeout': 0}, 'results': {}}, 'type': 'analysis', 'id': 'u-3edc2e93363bf40d0601fb0f4b5b6f36a1e8e3becdb51b74ef313a75ed164d6e-1678965428', 'links': {'item': 'https://www.virustotal.com/api/v3/urls/3edc2e93363bf40d0601fb0f4b5b6f36a1e8e3becdb51b74ef313a75ed164d6e', 'self': 'https://www.virustotal.com/api/v3/analyses/u-3edc2e93363bf40d0601fb0f4b5b6f36a1e8e3becdb51b74ef313a75ed164d6e-1678965428'}}}
+****************************************************************************************************
+^CTraceback (most recent call last):
+  File "/home/vlad/PycharmProjects/DjangoPoligon/poligon/manage.py", line 22, in <module>
+    main()
+  File "/home/vlad/PycharmProjects/DjangoPoligon/poligon/manage.py", line 18, in main
+    execute_from_command_line(sys.argv)
+  File "/home/vlad/PycharmProjects/DjangoPoligon/venv/lib/python3.10/site-packages/django/core/management/__init__.py", line 446, in execute_from_command_line
+    utility.execute()
+  File "/home/vlad/PycharmProjects/DjangoPoligon/venv/lib/python3.10/site-packages/django/core/management/__init__.py", line 440, in execute
+    self.fetch_command(subcommand).run_from_argv(self.argv)
+  File "/home/vlad/PycharmProjects/DjangoPoligon/venv/lib/python3.10/site-packages/django_extensions/management/email_notifications.py", line 65, in run_from_argv
+    super().run_from_argv(argv)
+  File "/home/vlad/PycharmProjects/DjangoPoligon/venv/lib/python3.10/site-packages/django/core/management/base.py", line 402, in run_from_argv
+    self.execute(*args, **cmd_options)
+  File "/home/vlad/PycharmProjects/DjangoPoligon/venv/lib/python3.10/site-packages/django_extensions/management/email_notifications.py", line 77, in execute
+    super().execute(*args, **options)
+  File "/home/vlad/PycharmProjects/DjangoPoligon/venv/lib/python3.10/site-packages/django/core/management/base.py", line 448, in execute
+    output = self.handle(*args, **options)
+  File "/home/vlad/PycharmProjects/DjangoPoligon/venv/lib/python3.10/site-packages/django_extensions/management/utils.py", line 62, in inner
+    ret = func(self, *args, **kwargs)
+  File "/home/vlad/PycharmProjects/DjangoPoligon/venv/lib/python3.10/site-packages/django_extensions/management/commands/runscript.py", line 264, in handle
+    script_modules = find_modules_for_script(script)
+  File "/home/vlad/PycharmProjects/DjangoPoligon/venv/lib/python3.10/site-packages/django_extensions/management/commands/runscript.py", line 250, in find_modules_for_script
+    mod = my_import(subdir, script)
+  File "/home/vlad/PycharmProjects/DjangoPoligon/venv/lib/python3.10/site-packages/django_extensions/management/commands/runscript.py", line 204, in my_import
+    t = importlib.import_module(full_module_path)
+  File "/usr/lib/python3.10/importlib/__init__.py", line 126, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+  File "<frozen importlib._bootstrap>", line 1050, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 1027, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 1006, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 688, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 883, in exec_module
+  File "<frozen importlib._bootstrap>", line 241, in _call_with_frames_removed
+  File "/home/vlad/PycharmProjects/DjangoPoligon/poligon/scripts/test.py", line 23, in <module>
+    run_4_in_minute()
+  File "/home/vlad/PycharmProjects/DjangoPoligon/poligon/scripts/test.py", line 16, in run_4_in_minute
+    sleep(5)
+KeyboardInterrupt
+
+(venv) vlad@zb:~/PycharmProjects/DjangoPoligon/poligon$ python3 manage.py runscript test
+267
+START check_domain low.allicyl.com 267
+START get_domain_check_id
+200
+{'data': {'type': 'analysis', 'id': 'u-f6d347b948115f551787da50d45bc51f472264b591cecd7dc44f461b8135a720-1678965519', 'links': {'self': 'https://www.virustotal.com/api/v3/analyses/u-f6d347b948115f551787da50d45bc51f472264b591cecd7dc44f461b8135a720-1678965519'}}}
+****************************************************************************************************
+START get_checked_data
+200
+{'meta': {'url_info': {'url': 'http://low.allicyl.com/', 'id': 'f6d347b948115f551787da50d45bc51f472264b591cecd7dc44f461b8135a720'}}, 'data': {'attributes': {'date': 1678965519, 'status': 'queued', 'stats': {'harmless': 0, 'malicious': 0, 'suspicious': 0, 'undetected': 0, 'timeout': 0}, 'results': {}}, 'type': 'analysis', 'id': 'u-f6d347b948115f551787da50d45bc51f472264b591cecd7dc44f461b8135a720-1678965519', 'links': {'item': 'https://www.virustotal.com/api/v3/urls/f6d347b948115f551787da50d45bc51f472264b591cecd7dc44f461b8135a720', 'self': 'https://www.virustotal.com/api/v3/analyses/u-f6d347b948115f551787da50d45bc51f472264b591cecd7dc44f461b8135a720-1678965519'}}}
+****************************************************************************************************

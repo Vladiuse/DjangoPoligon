@@ -1,0 +1,20 @@
+<!--<form method="POST" enctype="multipart/form-data">-->
+<!--    {%csrf_token%}-->
+<!--    <p>One</p>-->
+<!--    {{form_one.as_div}}-->
+<!--    <p>Two</p>-->
+<!--        {{form_two.as_div}}-->
+<!--    {{form_main.as_div}}-->
+<!--    <button type="submit">SEND</button>-->
+<!--</form>-->
+<!--<br>-->
+<!--<hr>-->
+<!--{%for m in mains%}-->
+<!--<p>{{m.main}} | {{m.one}} | {{m.two}}</p>-->
+<!--{%endfor%}-->
+123
+<form method="POST" enctype="multipart/form-data">
+    {%csrf_token%}
+    {{form}}
+    <button type="submit">SENT</button>
+</form>

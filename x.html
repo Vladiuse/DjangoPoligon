@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+</head>
+<body>
+
+    <img id="x" src="https://i.pinimg.com/originals/8a/de/fe/8adefe5af862b4f9cec286c6ee4722cb.jpg" alt="">
+    <img id="y"  src="https://s1.1zoom.ru/big0/52/Love_Sunrises_and_sunsets_Fingers_Hands_Heart_Sun_532758_1280x897.jpg" alt="">
+    <style>
+        img{
+            width: 300px;
+        }
+        .bubble{
+            position: absolute;
+            width: 150px;
+            height: 60px;
+            background-color: grey;
+            border: 1px solid red;
+            color: black;
+            opacity: 0.7;
+        }
+        .bubble p{
+            text-align: center;
+            margin: 2px 0;
+        }
+        .bubble p.green{
+            color: green;
+        }
+        .bubble p.orange{
+            color: orange
+        }
+        .bubble p.red{
+            color: red;
+        }
+        #on-bubble{
+            position: absolute;
+            bottom: 50px;
+            left: 50px;
+        }
+    </style>
+    <button onclick="MarkImages()" id="on-bubble">XXXX</button>
+    <script>
+        
+        MarkImages()
+        window.addEventListener('resize', remove_bubbles);
+        function get_img_info(img){
+            let href = img.attr('src')
+            url = 'http://127.0.0.1:8000/get-img-info'
+            if (!(href.startsWith('chrome-extension') || href =='')){
+                $.post(url, data={'img_href': href},function(res){
+                console.log(res)
+                add_bubble_img(img, res)
+                })
+            }
+        }
+
+        function add_bubble_img(img, back_data){
+            let GREEN = 1
+            let ORANGE = 1.3
+            let RED = 1.7
+            //
+            let bubble = document.createElement('div')
+            bubble.classList.add('bubble')
+            bubble.style.top = img.offset().top + 'px'
+            bubble.style.left = img.offset().left + 'px'
+            $('body').append(bubble)
+            let original_info = document.createElement('p')
+            original_info.textContent += `page: ${img.width()}x${img.height()}`
+            bubble.appendChild(original_info)
+            let back_info = document.createElement('p')
+            back_info.textContent += `orig: ${back_data['width']}x${back_data['height']}`
+            bubble.appendChild(back_info)
+            let diff = document.createElement('p')
+
+            let HDiff = Math.round(back_data['width']/img.width()*10)/10
+            diff.textContent += `coof: x${HDiff}`
+            if (HDiff > GREEN && HDiff < ORANGE) {diff.classList.add('green')}
+            if (HDiff > ORANGE && HDiff < RED) {diff.classList.add('orange')}
+            if (HDiff > RED) {diff.classList.add('red')}
+            // let WDiff = Math.round(back_data['height']/img.height()*10)/10
+
+            bubble.appendChild(diff)
+        }
+
+        function remove_bubbles(){
+            $('.bubble').remove()
+        }
+
+        function MarkImages(){
+            remove_bubbles()
+            $('body img').each(function(){
+                get_img_info($(this))
+                })
+        }
+
+
+
+
+        function getImgSize(imgSrc) {
+    var newImg = new Image();
+
+    newImg.onload = function() {
+      var height = newImg.height;
+      var width = newImg.width;
+      console.log ('The image size is '+width+'*'+height);
+    }
+
+    newImg.src = imgSrc; // this must be done AFTER setting onload
+}
+
+getImgSize(x.src)
+
+a1=new Image();
+a1.src=x.src;
+size=a1.filesize;
+    </script>
+    
+</body>
+</html>

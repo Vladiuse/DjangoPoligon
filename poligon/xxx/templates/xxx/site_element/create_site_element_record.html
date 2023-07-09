@@ -1,0 +1,19 @@
+{%extends 'xxx/site_element/base.html'%}
+{%block content%}
+<style>
+  select{
+  height: 300px;
+  }
+  textarea{
+  height: 200px;
+  }
+  
+  </style>
+<div class="container">
+    <form method="POST" novalidate>
+    {%csrf_token%}
+    {{form.as_div}}
+    <button type="submit" class="btn btn-primary">SEND1</button>
+</form>
+</div>
+{%endblock%}
