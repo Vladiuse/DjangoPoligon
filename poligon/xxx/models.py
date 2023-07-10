@@ -83,10 +83,12 @@ class SiteImages(models.Model):
 
     class Meta:
         unique_together = ['domain', 'image_url']
+        ordering = ['-pk']
 
     def load_orig_img(self, soft=False):
         if soft and self.orig_img:
             return
+        print('lOAD')
         res = load_img_http(self.image_url)
         if res['status']:
             bytes = res['content']

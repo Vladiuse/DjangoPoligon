@@ -5,7 +5,7 @@ from .models import Question, SiteImages, Domain, ImageEx
 from .img_info import get_image_info
 from django.views.decorators.http import require_http_methods
 from django.views.decorators.csrf import csrf_exempt
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, action
 from .serializers import SiteImagesSerializer
 from rest_framework.response import Response
 import json
@@ -50,6 +50,20 @@ class SiteImagesViewSet(viewsets.ModelViewSet):
 
     def get_object(self):
         return SiteImages.objects.get(pk=self.kwargs['image_id'])
+
+    @action(detail=True, methods=['GET'])
+    def load_orig(self, request,image_id):
+        obj = self.get_object()
+        obj.load_orig_img()
+        serializer = self.get_serializer(obj)
+        return Response(serializer.data)
+
+    @action(detail=True, methods=['GET'])
+    def make_thumb(self, request,image_id):
+        obj = self.get_object()
+        obj.make_thumb()
+        serializer = self.get_serializer(obj)
+        return Response(serializer.data)
 
     # def get_object(self):
     #     print('get_object')
