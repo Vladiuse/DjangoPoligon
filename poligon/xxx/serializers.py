@@ -10,11 +10,6 @@ class DomainSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-# class SiteImagesSerializer(serializers.Serializer):
-#     image_url = serializers.CharField()
-#     page_width = serializers.IntegerField()
-#     page_height = serializers.IntegerField()
-
 class SiteImageOrigInfo(serializers.ModelSerializer):
     size = serializers.IntegerField(source='orig_img.size')
     width = serializers.IntegerField(source='orig_img.width')

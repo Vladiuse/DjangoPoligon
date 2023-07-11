@@ -5,12 +5,9 @@ from datetime import timedelta
 from django.utils import timezone
 import requests as req
 from requests.exceptions import RequestException
-from django.core.files import File
 import io
 from PIL import Image
 from django.core.files.images import ImageFile
-from django.core.files.uploadedfile import SimpleUploadedFile
-from django.db.models import Manager
 
 
 def get_file_size_text(size):
@@ -18,14 +15,16 @@ def get_file_size_text(size):
     if kb <= 1023:
         return f'{kb}kb'
     else:
-        mb = round(kb // 1024,2)
+        mb = round(kb // 1024, 2)
         return f'{mb}MB'
 
-def remove_file_if_exists(file_path:str):
+
+def remove_file_if_exists(file_path: str):
     if os.path.exists(file_path):
         os.remove(file_path)
         return True
     return False
+
 
 def load_img_http(url):
     result = {}
@@ -43,11 +42,10 @@ def load_img_http(url):
     return result
 
 
-def make_thumb(image_path, size:tuple, compress=False):
+def make_thumb(image_path, size: tuple, compress=False):
     image = Image.open(image_path)
     image.thumbnail(size)
     return image
-
 
 
 class Question(models.Model):
@@ -60,7 +58,6 @@ class Question(models.Model):
         return False
 
     class Meta:
-
         ordering = ['-pk']
 
 
@@ -87,17 +84,18 @@ class Domain(models.Model):
 
 
 def image_path(instanse, filename):
-    domain_name = instanse.domain.name.replace('http://','')
+    domain_name = instanse.domain.name.replace('http://', '')
     return f'{domain_name}/{filename}'
+
 
 class SiteImages(models.Model):
     domain = models.ForeignKey(Domain, on_delete=models.CASCADE)
     image_url = models.URLField()
     page_width = models.IntegerField()
     page_height = models.IntegerField()
-    orig_img = models.ImageField(blank=True, upload_to=image_path,)
-    thumb = models.ImageField(blank=True,upload_to=image_path, )
-    thumb_compress = models.ImageField(blank=True,upload_to=image_path, )
+    orig_img = models.ImageField(blank=True, upload_to=image_path, )
+    thumb = models.ImageField(blank=True, upload_to=image_path, )
+    thumb_compress = models.ImageField(blank=True, upload_to=image_path, )
 
     class Meta:
         unique_together = ['domain', 'image_url']
@@ -105,14 +103,6 @@ class SiteImages(models.Model):
 
     def orig_img_params(self):
         return self._image_info(self.orig_img)
-        # if self.orig_img:
-        #     return {
-        #         'size': self.orig_img.size,
-        #         'size_text': get_file_size_text(self.orig_img.size),
-        #         'width': self.orig_img.width,
-        #         'height': self.orig_img.height,
-        #     }
-        # return None
 
     def thumb_params(self):
         return self._image_info(self.thumb)
@@ -148,7 +138,7 @@ class SiteImages(models.Model):
     def make_thumb(self):
         if self.thumb:
             remove_file_if_exists(self.thumb.path)
-        size = (self.page_width,self.page_height)
+        size = (self.page_width, self.page_height)
         thumb = make_thumb(self.orig_img.path, size)
         blob = io.BytesIO()
         thumb.save(blob, thumb.format)
@@ -164,12 +154,11 @@ class SiteImages(models.Model):
 
     def compression_percent(self):
         if self.orig_img and self.thumb:
-            return round(self.orig_img.size/self.thumb.size/100, 1)
+            return round(self.orig_img.size / self.thumb.size / 100, 1)
 
     def compression_weight(self):
         if self.orig_img and self.thumb:
             return self.orig_img.size - self.thumb.size
-
 
     def _image_info(self, field):
         if field:
@@ -181,5 +170,3 @@ class SiteImages(models.Model):
                 'file_name': os.path.basename(field.name),
             }
         return None
-
-

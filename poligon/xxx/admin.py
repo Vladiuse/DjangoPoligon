@@ -8,7 +8,7 @@ def img_tag(src):
     return mark_safe(f'<img src="{src}" width="50px" height="50px" />')
 
 
-def remove_protokol(url:str):
+def remove_protokol(url: str):
     return re.sub('http[s]?://', '', url)
 
 
