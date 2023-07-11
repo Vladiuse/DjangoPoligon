@@ -104,14 +104,18 @@ class SiteImages(models.Model):
         ordering = ['-pk']
 
     def orig_img_params(self):
-        if self.orig_img:
-            return {
-                'size': self.orig_img.size,
-                'size_text': get_file_size_text(self.orig_img.size),
-                'width': self.orig_img.width,
-                'height': self.orig_img.height,
-            }
-        return None
+        return self._image_info(self.orig_img)
+        # if self.orig_img:
+        #     return {
+        #         'size': self.orig_img.size,
+        #         'size_text': get_file_size_text(self.orig_img.size),
+        #         'width': self.orig_img.width,
+        #         'height': self.orig_img.height,
+        #     }
+        # return None
+
+    def thumb_params(self):
+        return self._image_info(self.thumb)
 
     def delete_images(self):
         for field in self.orig_img, self.thumb:
@@ -165,5 +169,17 @@ class SiteImages(models.Model):
     def compression_weight(self):
         if self.orig_img and self.thumb:
             return self.orig_img.size - self.thumb.size
+
+
+    def _image_info(self, field):
+        if field:
+            return {
+                'size': field.size,
+                'size_text': get_file_size_text(field.size),
+                'width': field.width,
+                'height': field.height,
+                'file_name': os.path.basename(field.name),
+            }
+        return None
 
 
