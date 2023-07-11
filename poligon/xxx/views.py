@@ -50,6 +50,7 @@ class SiteImagesViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         return SiteImages.objects.filter(domain_id=self.kwargs['domain_id'])
 
+    @action(methods=['GET'], detail=True)
     def create_or_update(self, request, *args, **kwargs):
         try:
             site_image = SiteImages.objects.get(
@@ -59,7 +60,7 @@ class SiteImagesViewSet(viewsets.ModelViewSet):
         except SiteImages.DoesNotExist:
             serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        site_image = serializer.save()
+        site_image = serializer.save(domain_id=self.kwargs['domain_id'])
         load_result = site_image.load_orig_img()
         return Response({
             'image': serializer.data,

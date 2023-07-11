@@ -27,13 +27,21 @@
 
 from xxx.models import Domain, SiteImages
 from xxx.serializers import SiteImagesSerializer
-
-domain = Domain.objects.get(pk=1)
+from rest_framework import serializers
+domain = Domain.objects.get(pk=2)
 data = {
-    'domain': 1,
-    'image_url': 'https://kartinkof.club/uploads/posts/2022-05/1652654546_1-kartinkof-club-p-prikoli-o-subbote-kartinki-1.jpg',
+    'image_url': 'https://kartinkof.club/up',
     'page_width': 30,
     'page_height': 30,
 }
+
+
+
+# class SiteImagesSerializer(serializers.ModelSerializer):
+#     domain = serializers.ReadOnlyField(source='domain.pk')
+#     class Meta:
+#         model = SiteImages
+#         fields = ['image_url', 'page_width', 'page_height', 'domain']
+
 
 serializer = SiteImagesSerializer(data=data)

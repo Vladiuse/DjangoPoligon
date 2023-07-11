@@ -2,6 +2,7 @@ from io import BytesIO
 from PIL import Image
 import requests as req
 import sys
+from rest_framework import serializers
 
 href = 'https://previewpreland.pro/shinval-buzova/img/xpic8.jpg.pagespeed.ic.7nzA5C5noP.jpg'
 
