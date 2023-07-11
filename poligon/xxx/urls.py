@@ -8,7 +8,7 @@ router.register(r'domains', views.DomainViewSet)
 
 site_images_list = views.SiteImagesViewSet.as_view({
     'get': 'list',
-    'post': 'create'
+    'post': 'create_or_update'
 })
 
 site_images_detail = views.SiteImagesViewSet.as_view({

@@ -12,6 +12,21 @@ from django.core.files.images import ImageFile
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.db.models import Manager
 
+
+def get_file_size_text(size):
+    kb = size // 1024
+    if kb <= 1023:
+        return f'{kb}kb'
+    else:
+        mb = round(kb // 1024,2)
+        return f'{mb}MB'
+
+def remove_file_if_exists(file_path:str):
+    if os.path.exists(file_path):
+        os.remove(file_path)
+        return True
+    return False
+
 def load_img_http(url):
     result = {}
     try:
@@ -88,20 +103,28 @@ class SiteImages(models.Model):
         unique_together = ['domain', 'image_url']
         ordering = ['-pk']
 
+    def orig_img_params(self):
+        if self.orig_img:
+            return {
+                'size': self.orig_img.size,
+                'size_text': get_file_size_text(self.orig_img.size),
+                'width': self.orig_img.width,
+                'height': self.orig_img.height,
+            }
+        return None
+
     def delete_images(self):
         for field in self.orig_img, self.thumb:
             if field:
-                if os.path.exists(field.path):
-                    os.remove(field.path)
+                remove_file_if_exists(field.path)
         self.orig_img = None
         self.thumb = None
         self.save()
 
-
     def load_orig_img(self, soft=False):
+        self.delete_images()
         if soft and self.orig_img:
             return
-        print('lOAD')
         res = load_img_http(self.image_url)
         if res['status']:
             bytes = res['content']
@@ -110,6 +133,7 @@ class SiteImages(models.Model):
             self.orig_img = img
             self.save()
             print(res['status'])
+            return {'status': True}
         else:
             print(res)
             return res
@@ -118,6 +142,8 @@ class SiteImages(models.Model):
         return os.path.splitext(self.orig_img.path)[1]
 
     def make_thumb(self):
+        if self.thumb:
+            remove_file_if_exists(self.thumb.path)
         size = (self.page_width,self.page_height)
         thumb = make_thumb(self.orig_img.path, size)
         blob = io.BytesIO()
