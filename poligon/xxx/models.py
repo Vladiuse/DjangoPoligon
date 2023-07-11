@@ -28,16 +28,17 @@ def remove_file_if_exists(file_path: str):
 
 def load_img_http(url):
     result = {}
+    result['status'] = False
     try:
         res = req.get(url)
-        if res.status_code == 200:
+        if res.status_code != 200:
+            result['msg'] = 'status code ' + str(res.status_code)
+        elif res.headers['Content-Type'] and not res.headers['Content-Type'].startswith('image'):
+            result['msg'] = res.headers['Content-Type']
+        else:
             result['status'] = True
             result['content'] = res.content
-        else:
-            result['status'] = False
-            result['msg'] = 'status code ' + str(res.status_code)
     except RequestException as error:
-        result['status'] = False
         result['msg'] = 'status code ' + str(error)
     return result
 

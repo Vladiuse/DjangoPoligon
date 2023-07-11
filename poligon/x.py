@@ -24,24 +24,32 @@
 #     print(image.format)
 #
 # image_model = SiteImages.objects.get(pk=66)
+import os.path
 
-from xxx.models import Domain, SiteImages
-from xxx.serializers import SiteImagesSerializer
-from rest_framework import serializers
-domain = Domain.objects.get(pk=2)
-data = {
-    'image_url': 'https://kartinkof.club/up',
-    'page_width': 30,
-    'page_height': 30,
-}
+from django.db import models
+from datetime import timedelta
+from django.utils import timezone
+import requests as req
+from requests.exceptions import RequestException
+import io
+from PIL import Image
+from django.core.files.images import ImageFile
 
+def load_img_http(url):
+    result = {}
+    result['status'] = False
+    try:
+        res = req.get(url)
+        if res.status_code != 200:
+            result['msg'] = 'status code ' + str(res.status_code)
+        elif res.headers['Content-Type'] and not res.headers['Content-Type'].startswith('image'):
+            result['msg'] = res.headers['Content-Type']
+        else:
+            result['status'] = True
+            result['content'] = res.content
+    except RequestException as error:
+        result['msg'] = 'status code ' + str(error)
+    return result
+url = 'http://amazing-cdn.com/e.wloss-new.com/graziani_files/logo.png'
 
-
-# class SiteImagesSerializer(serializers.ModelSerializer):
-#     domain = serializers.ReadOnlyField(source='domain.pk')
-#     class Meta:
-#         model = SiteImages
-#         fields = ['image_url', 'page_width', 'page_height', 'domain']
-
-
-serializer = SiteImagesSerializer(data=data)
+print(load_img_http(url))
