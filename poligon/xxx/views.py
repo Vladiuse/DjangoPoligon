@@ -6,7 +6,7 @@ from .img_info import get_image_info
 from django.views.decorators.http import require_http_methods
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.decorators import api_view, action
-from .serializers import SiteImagesSerializer
+from .serializers import SiteImagesSerializer, DomainSerializer
 from rest_framework.response import Response
 import json
 from rest_framework.parsers import JSONParser
@@ -35,6 +35,9 @@ def image_info(request):
     info = get_image_info(img_href)
     return JsonResponse(info, safe=True)
 
+class DomainViewSet(viewsets.ModelViewSet):
+    queryset = Domain.objects.all()
+    serializer_class = DomainSerializer
 
 class SiteImagesViewSet(viewsets.ModelViewSet):
     serializer_class = SiteImagesSerializer
@@ -64,6 +67,17 @@ class SiteImagesViewSet(viewsets.ModelViewSet):
         obj.make_thumb()
         serializer = self.get_serializer(obj)
         return Response(serializer.data)
+
+    @action(detail=True, methods=['GET'])
+    def load_make_thumb(self, request,image_id):
+        obj = self.get_object()
+        res = obj.load_make_thumb()
+        serializer = self.get_serializer(obj)
+        return Response({
+            'result': res,
+            'image': serializer.data
+        })
+
 
     # def get_object(self):
     #     print('get_object')

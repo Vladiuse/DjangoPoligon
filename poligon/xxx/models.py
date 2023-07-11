@@ -10,6 +10,7 @@ import io
 from PIL import Image
 from django.core.files.images import ImageFile
 from django.core.files.uploadedfile import SimpleUploadedFile
+from django.db.models import Manager
 
 def load_img_http(url):
     result = {}
@@ -55,12 +56,12 @@ class Book(models.Model):
 class ImageEx(models.Model):
     image = models.ImageField(upload_to='examples')
 
+    class Meta:
+        verbose_name = 'Заготовка картинки'
+        verbose_name_plural = 'Заготовки картинок'
+
     def __str__(self):
         return self.image.name
-
-
-
-
 
 
 class Domain(models.Model):
@@ -77,6 +78,8 @@ def image_path(instanse, filename):
 class SiteImages(models.Model):
     domain = models.ForeignKey(Domain, on_delete=models.CASCADE)
     image_url = models.URLField()
+    page_width = models.IntegerField()
+    page_height = models.IntegerField()
     orig_img = models.ImageField(blank=True, upload_to=image_path,)
     thumb = models.ImageField(blank=True,upload_to=image_path, )
     thumb_compress = models.ImageField(blank=True,upload_to=image_path, )
@@ -84,6 +87,16 @@ class SiteImages(models.Model):
     class Meta:
         unique_together = ['domain', 'image_url']
         ordering = ['-pk']
+
+    def delete_images(self):
+        for field in self.orig_img, self.thumb:
+            if field:
+                if os.path.exists(field.path):
+                    os.remove(field.path)
+        self.orig_img = None
+        self.thumb = None
+        self.save()
+
 
     def load_orig_img(self, soft=False):
         if soft and self.orig_img:
@@ -105,13 +118,19 @@ class SiteImages(models.Model):
         return os.path.splitext(self.orig_img.path)[1]
 
     def make_thumb(self):
-        size = (30,30)
+        size = (self.page_width,self.page_height)
         thumb = make_thumb(self.orig_img.path, size)
         blob = io.BytesIO()
         thumb.save(blob, thumb.format)
         ext = os.path.splitext(self.image_url)[1]
         self.thumb = ImageFile(blob, name=f'THUMB{ext}')
         self.save()
+
+    def load_make_thumb(self):
+        res_loading = self.load_orig_img()
+        if res_loading['status']:
+            self.make_thumb()
+        return res_loading
 
     def compression_percent(self):
         if self.orig_img and self.thumb:
