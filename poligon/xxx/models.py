@@ -137,15 +137,16 @@ class SiteImages(models.Model):
         return os.path.splitext(self.orig_img.path)[1]
 
     def make_thumb(self):
-        if self.thumb:
-            remove_file_if_exists(self.thumb.path)
-        size = (self.page_width, self.page_height)
-        thumb = make_thumb(self.orig_img.path, size)
-        blob = io.BytesIO()
-        thumb.save(blob, thumb.format)
-        ext = os.path.splitext(self.image_url)[1]
-        self.thumb = ImageFile(blob, name=f'THUMB{ext}')
-        self.save()
+        if self.orig_img:
+            if self.thumb:
+                remove_file_if_exists(self.thumb.path)
+            size = (self.page_width, self.page_height)
+            thumb = make_thumb(self.orig_img.path, size)
+            blob = io.BytesIO()
+            thumb.save(blob, thumb.format)
+            ext = os.path.splitext(self.image_url)[1]
+            self.thumb = ImageFile(blob, name=f'THUMB{ext}')
+            self.save()
 
     def load_make_thumb(self):
         res_loading = self.load_orig_img()
